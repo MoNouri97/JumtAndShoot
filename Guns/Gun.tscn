@@ -1,0 +1,33 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Guns/Gun.gd" type="Script" id=2]
+[ext_resource path="res://square.png" type="Texture" id=3]
+
+[node name="Gun" type="Node2D"]
+script = ExtResource( 2 )
+kick_back = 1.0
+bullets_per_shot = 3
+
+[node name="Sprite" type="Sprite" parent="."]
+self_modulate = Color( 0.0392157, 0.0392157, 0.0392157, 1 )
+position = Vector2( 0, -1.86035 )
+scale = Vector2( 0.7, 0.201677 )
+texture = ExtResource( 3 )
+centered = false
+offset = Vector2( 0, -28 )
+
+[node name="Muzzle" type="Position2D" parent="Sprite"]
+position = Vector2( 69.2145, 2.99651 )
+__meta__ = {
+"_gizmo_extents_": 38.3
+}
+
+[node name="ShotCooldown" type="Timer" parent="."]
+one_shot = true
+
+[node name="Sprite2" type="Sprite" parent="."]
+self_modulate = Color( 0.0392157, 0.0392157, 0.0392157, 1 )
+show_behind_parent = true
+position = Vector2( 5.71462, 7.06667 )
+scale = Vector2( 0.125432, 0.178092 )
+texture = ExtResource( 3 )

@@ -1,0 +1,200 @@
+[gd_scene load_steps=22 format=2]
+
+[ext_resource path="res://UI/TitleScreen.gd" type="Script" id=1]
+[ext_resource path="res://UI/Montserrat-Black.ttf" type="DynamicFontData" id=2]
+[ext_resource path="res://UI/Btns/Start.tscn" type="PackedScene" id=3]
+[ext_resource path="res://UI/Btns/Options.tscn" type="PackedScene" id=4]
+[ext_resource path="res://circle.png" type="Texture" id=5]
+[ext_resource path="res://Game/Lava.gd" type="Script" id=6]
+[ext_resource path="res://Player/square.png" type="Texture" id=7]
+[ext_resource path="res://Environment /Barrel.tscn" type="PackedScene" id=9]
+[ext_resource path="res://Game/Spawner.tscn" type="PackedScene" id=11]
+[ext_resource path="res://Game/ScreenShake.tscn" type="PackedScene" id=12]
+
+[sub_resource type="Curve" id=1]
+_data = [ Vector2( 0, 0 ), 0.0, 0.0299572, 0, 0, Vector2( 0.355932, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 0 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="Gradient" id=2]
+offsets = PoolRealArray( 0, 0.320896, 1 )
+colors = PoolColorArray( 1.27843, 0.45098, 0.109804, 1, 1.28, 0.45, 0.11, 1, 0.192157, 0.192157, 0.192157, 0 )
+
+[sub_resource type="RectangleShape2D" id=3]
+extents = Vector2( 2893.69, 128 )
+
+[sub_resource type="StyleBoxFlat" id=4]
+bg_color = Color( 1, 1, 1, 0.215686 )
+
+[sub_resource type="StyleBoxEmpty" id=5]
+
+[sub_resource type="DynamicFont" id=6]
+font_data = ExtResource( 2 )
+
+[sub_resource type="DynamicFontData" id=7]
+font_path = "res://UI/Montserrat-Black.ttf"
+
+[sub_resource type="DynamicFont" id=8]
+font_data = SubResource( 7 )
+
+[sub_resource type="PhysicsMaterial" id=9]
+bounce = 1.0
+
+[sub_resource type="RectangleShape2D" id=10]
+extents = Vector2( 90.3754, 89.1347 )
+
+[sub_resource type="RectangleShape2D" id=11]
+extents = Vector2( 134.412, 60.3923 )
+
+[node name="TitleScreen" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Lava" type="Area2D" parent="." groups=[
+"lava",
+]]
+position = Vector2( -232.359, 515.68 )
+z_index = 10
+script = ExtResource( 6 )
+__meta__ = {
+"_edit_group_": true
+}
+
+[node name="Sprite" type="Sprite" parent="Lava"]
+modulate = Color( 1.28, 0.45, 0.11, 1 )
+position = Vector2( 980.869, 200.375 )
+scale = Vector2( 36, 4 )
+texture = ExtResource( 7 )
+
+[node name="Particles2D" type="CPUParticles2D" parent="Lava"]
+position = Vector2( 917.816, 79.7158 )
+amount = 100
+lifetime = 2.0
+texture = ExtResource( 5 )
+emission_shape = 2
+emission_rect_extents = Vector2( 1000, 0 )
+direction = Vector2( 0, -1 )
+spread = 90.0
+gravity = Vector2( 0, 0 )
+initial_velocity = 82.35
+initial_velocity_random = 1.0
+scale_amount_random = 0.16
+scale_amount_curve = SubResource( 1 )
+color_ramp = SubResource( 2 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Lava"]
+position = Vector2( 886.637, 215.402 )
+shape = SubResource( 3 )
+
+[node name="Barrels" parent="." instance=ExtResource( 11 )]
+ground_check = false
+spawn_rate = 0.5
+total = -1
+x_range = [ 0, 1000 ]
+y_exact = -100
+what_to_spawn = ExtResource( 9 )
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2( 923, 540 )
+zoom = Vector2( 1.8, 1.8 )
+
+[node name="ScreenShake" parent="Camera2D" instance=ExtResource( 12 )]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Menu" type="VBoxContainer" parent="CanvasLayer"]
+margin_left = 49.0
+margin_top = 36.0
+margin_right = 976.0
+margin_bottom = 564.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Logo" type="Control" parent="CanvasLayer/Menu"]
+margin_right = 927.0
+
+[node name="Label" type="Label" parent="CanvasLayer/Menu/Logo"]
+margin_right = 40.0
+margin_bottom = 14.0
+text = "Made with <3  and Godot"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CenterRow" type="HBoxContainer" parent="CanvasLayer/Menu"]
+margin_top = 4.0
+margin_right = 927.0
+margin_bottom = 528.0
+size_flags_vertical = 3
+
+[node name="Buttons" type="VBoxContainer" parent="CanvasLayer/Menu/CenterRow"]
+margin_right = 400.0
+margin_bottom = 524.0
+size_flags_vertical = 3
+custom_constants/separation = 20
+alignment = 1
+
+[node name="Start" parent="CanvasLayer/Menu/CenterRow/Buttons" instance=ExtResource( 3 )]
+margin_top = 171.0
+margin_bottom = 231.0
+mouse_default_cursor_shape = 2
+custom_styles/hover = SubResource( 4 )
+custom_styles/normal = SubResource( 5 )
+scene_to_load = "res://Game/Main.tscn"
+
+[node name="Arena" parent="CanvasLayer/Menu/CenterRow/Buttons" instance=ExtResource( 4 )]
+margin_top = 251.0
+margin_bottom = 311.0
+custom_styles/hover = SubResource( 4 )
+custom_styles/normal = SubResource( 5 )
+scene_to_load = "res://World.tscn"
+
+[node name="Performance" type="Label" parent="CanvasLayer/Menu/CenterRow/Buttons"]
+margin_top = 331.0
+margin_right = 400.0
+margin_bottom = 352.0
+custom_fonts/font = SubResource( 6 )
+text = "Performance"
+
+[node name="CheckButton" type="CheckBox" parent="CanvasLayer/Menu/CenterRow/Buttons/Performance"]
+margin_left = 119.38
+margin_top = -8.90897
+margin_right = 195.38
+margin_bottom = 31.091
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Label" type="Label" parent="CanvasLayer/Menu/CenterRow"]
+margin_left = 404.0
+margin_top = 203.0
+margin_right = 677.0
+margin_bottom = 320.0
+custom_fonts/font = SubResource( 8 )
+text = "Be ready to jump and shoot
+* Enemy shot : +100 score
+* Barrel shot : +50 health
+* You can double & tripple jump
+* Tripple jump : -300 score"
+
+[node name="RigidBody2D" type="RigidBody2D" parent="."]
+position = Vector2( 151.191, 332.619 )
+mode = 1
+physics_material_override = SubResource( 9 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RigidBody2D"]
+position = Vector2( 8.06958, -19.5373 )
+shape = SubResource( 10 )
+
+[node name="RigidBody2D2" type="RigidBody2D" parent="."]
+position = Vector2( 564.445, 332.619 )
+mode = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RigidBody2D2"]
+position = Vector2( 20.0838, -28.0316 )
+shape = SubResource( 11 )
+[connection signal="body_entered" from="Lava" to="Lava" method="_on_Area2D_body_entered"]
+[connection signal="toggled" from="CanvasLayer/Menu/CenterRow/Buttons/Performance/CheckButton" to="." method="_on_CheckButton_toggled"]

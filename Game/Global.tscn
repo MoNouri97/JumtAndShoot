@@ -1,0 +1,12 @@
+[gd_scene load_steps=4 format=2]
+
+[ext_resource path="res://Game/Global.gd" type="Script" id=1]
+[ext_resource path="res://Player/Enemy.tscn" type="PackedScene" id=2]
+[ext_resource path="res://World_env.tres" type="Environment" id=3]
+
+[node name="Global" type="Node"]
+script = ExtResource( 1 )
+Enemies = [ ExtResource( 2 ) ]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = ExtResource( 3 )

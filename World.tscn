@@ -1,0 +1,141 @@
+[gd_scene load_steps=20 format=2]
+
+[ext_resource path="res://Environment /ground_tilemap.tres" type="TileSet" id=1]
+[ext_resource path="res://Player/Player.tscn" type="PackedScene" id=2]
+[ext_resource path="res://Game/Spawner.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Environment /Barrel.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Particles/EnemySpawner.tscn" type="PackedScene" id=7]
+[ext_resource path="res://Player/Health.tscn" type="PackedScene" id=8]
+[ext_resource path="res://Guns/Rifle.tscn" type="PackedScene" id=9]
+[ext_resource path="res://Game/ScreenShake.tscn" type="PackedScene" id=10]
+[ext_resource path="res://circle.png" type="Texture" id=11]
+[ext_resource path="res://Player/Score.tscn" type="PackedScene" id=12]
+[ext_resource path="res://Game/Lava.gd" type="Script" id=15]
+[ext_resource path="res://Player/square.png" type="Texture" id=17]
+[ext_resource path="res://UI/GameOver.tscn" type="PackedScene" id=18]
+
+[sub_resource type="Curve" id=1]
+_data = [ Vector2( 0, 0 ), 0.0, 0.0299572, 0, 0, Vector2( 0.355932, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 0 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="Gradient" id=2]
+offsets = PoolRealArray( 0, 0.320896, 1 )
+colors = PoolColorArray( 1.27843, 0.45098, 0.109804, 1, 1.28, 0.45, 0.11, 1, 0.192157, 0.192157, 0.192157, 0 )
+
+[sub_resource type="StreamTexture" id=3]
+flags = 4
+load_path = "res://.import/circle.png-10953cad44a8947fbdd4128a631e9e52.stex"
+
+[sub_resource type="Curve" id=4]
+_data = [ Vector2( 0, 0 ), 0.0, 0.0299572, 0, 0, Vector2( 0.355932, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 0 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="Gradient" id=5]
+colors = PoolColorArray( 1, 1, 1, 1, 0.192157, 0.192157, 0.192157, 0 )
+
+[sub_resource type="RectangleShape2D" id=6]
+extents = Vector2( 2477.74, 128 )
+
+[node name="World" type="Node2D"]
+
+[node name="Spawners" type="Node" parent="."]
+
+[node name="SpawnerEnemies" parent="Spawners" instance=ExtResource( 3 )]
+position = Vector2( 0, -3 )
+spawn_rate = 0.5
+total = -1
+y_exact = 100
+what_to_spawn = ExtResource( 7 )
+
+[node name="Barrels" parent="Spawners" instance=ExtResource( 3 )]
+spawn_rate = 1.0
+total = -1
+y_exact = -100
+what_to_spawn = ExtResource( 6 )
+
+[node name="Player" parent="." instance=ExtResource( 2 )]
+position = Vector2( 445.35, 751.667 )
+Gun = ExtResource( 9 )
+color = {
+"bullet": Color( 0.6, 1.16, 1.16, 1 ),
+"main": Color( 0.517647, 0.972549, 0.972549, 1 )
+}
+jump_force = 35
+max_mid_air_jumps = 2
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Health" parent="CanvasLayer" instance=ExtResource( 8 )]
+
+[node name="Score" parent="CanvasLayer" instance=ExtResource( 12 )]
+margin_left = 2.24493
+margin_top = 92.0419
+margin_right = 2.24487
+margin_bottom = 92.0419
+
+[node name="GameOver" parent="CanvasLayer" instance=ExtResource( 18 )]
+visible = false
+
+[node name="Lava2" type="Area2D" parent="." groups=[
+"lava",
+]]
+position = Vector2( -6.72717, 968.713 )
+z_index = 10
+script = ExtResource( 15 )
+
+[node name="Sprite" type="Sprite" parent="Lava2"]
+modulate = Color( 1.28, 0.45, 0.11, 1 )
+position = Vector2( 980.869, 200.375 )
+scale = Vector2( 60.5, 4 )
+texture = ExtResource( 17 )
+
+[node name="Particles2D" type="CPUParticles2D" parent="Lava2"]
+position = Vector2( 917.816, 79.7158 )
+amount = 100
+lifetime = 2.0
+preprocess = 84.96
+texture = ExtResource( 11 )
+emission_shape = 2
+emission_rect_extents = Vector2( 1000, 0 )
+direction = Vector2( 0, -1 )
+spread = 90.0
+gravity = Vector2( 0, 0 )
+initial_velocity = 82.35
+initial_velocity_random = 1.0
+scale_amount_random = 0.16
+scale_amount_curve = SubResource( 1 )
+color_ramp = SubResource( 2 )
+
+[node name="BG" type="CPUParticles2D" parent="Lava2"]
+position = Vector2( 920.747, -759.524 )
+amount = 100
+preprocess = 116.81
+texture = SubResource( 3 )
+emission_shape = 2
+emission_rect_extents = Vector2( 1000, 500 )
+direction = Vector2( 0, 1 )
+spread = 0.0
+gravity = Vector2( 0, 0 )
+initial_velocity = 50.0
+scale_amount = 0.01
+scale_amount_random = 0.11
+scale_amount_curve = SubResource( 4 )
+color_ramp = SubResource( 5 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Lava2"]
+position = Vector2( 886.637, 215.402 )
+shape = SubResource( 6 )
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2( 923, 540 )
+current = true
+zoom = Vector2( 1.8, 1.8 )
+
+[node name="ScreenShake" parent="Camera2D" instance=ExtResource( 10 )]
+
+[node name="TileMap" type="TileMap" parent="." groups=[
+"floor",
+]]
+modulate = Color( 0.882353, 0.882353, 0.882353, 1 )
+tile_set = ExtResource( 1 )
+format = 1
+tile_data = PoolIntArray( 327682, 0, 0, 327683, 0, 0, 327693, 0, 0, 327694, 0, 0, 393236, 0, 0, 393237, 0, 0, 524295, 0, 0, 524296, 0, 0, 655376, 0, 0, 720918, 0, 0, 720919, 0, 0, 983043, 0, 0, 983044, 0, 0, 983045, 0, 0, 983046, 0, 0, 983047, 0, 0, 983048, 0, 0, 983049, 1073741824, 0, 983050, 1073741824, 0, 983051, 1073741824, 0, 983052, 1073741824, 0, 983053, 1073741824, 0, 983054, 1073741824, 0, 983055, 1073741824, 0, 983056, 1073741824, 0, 983057, 0, 0, 983058, 0, 0, 983059, 0, 0, 983060, 0, 0, 983061, 0, 0, 983062, 0, 0, 983063, 0, 0, 983064, 0, 0, 1048579, 0, 0, 1048580, 0, 0, 1048581, 0, 0, 1048582, 0, 0, 1048583, 0, 0, 1048584, 0, 0, 1048585, 1073741824, 0, 1048586, 1073741824, 0, 1048587, 1073741824, 0, 1048588, 1073741824, 0, 1048589, 1073741824, 0, 1048590, 1073741824, 0, 1048591, 1073741824, 0, 1048592, 1073741824, 0, 1048593, 0, 0, 1048594, 0, 0, 1048595, 0, 0, 1048596, 0, 0, 1048597, 0, 0, 1048598, 0, 0, 1048599, 0, 0, 1048600, 0, 0 )
+[connection signal="body_entered" from="Lava2" to="Lava2" method="_on_Area2D_body_entered"]

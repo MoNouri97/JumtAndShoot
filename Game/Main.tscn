@@ -1,0 +1,128 @@
+[gd_scene load_steps=17 format=2]
+
+[ext_resource path="res://Player/Player.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Player/square.png" type="Texture" id=2]
+[ext_resource path="res://Game/Lava.gd" type="Script" id=3]
+[ext_resource path="res://Game/Platform.tscn" type="PackedScene" id=5]
+[ext_resource path="res://Game/Spawner.tscn" type="PackedScene" id=6]
+[ext_resource path="res://Guns/Rifle.tscn" type="PackedScene" id=8]
+[ext_resource path="res://Player/Health.tscn" type="PackedScene" id=9]
+[ext_resource path="res://Environment /Barrel.tscn" type="PackedScene" id=10]
+[ext_resource path="res://Game/ScreenShake.tscn" type="PackedScene" id=11]
+[ext_resource path="res://circle.png" type="Texture" id=12]
+[ext_resource path="res://Player/Score.tscn" type="PackedScene" id=13]
+[ext_resource path="res://UI/GameOver.tscn" type="PackedScene" id=14]
+
+[sub_resource type="Curve" id=1]
+_data = [ Vector2( 0, 0 ), 0.0, 0.0299572, 0, 0, Vector2( 0.355932, 1 ), 0.0, 0.0, 0, 0, Vector2( 1, 0 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="Gradient" id=2]
+offsets = PoolRealArray( 0, 0.320896, 1 )
+colors = PoolColorArray( 1.27843, 0.45098, 0.109804, 1, 1.28, 0.45, 0.11, 1, 0.192157, 0.192157, 0.192157, 0 )
+
+[sub_resource type="Gradient" id=3]
+colors = PoolColorArray( 1, 1, 1, 1, 0.192157, 0.192157, 0.192157, 0 )
+
+[sub_resource type="RectangleShape2D" id=4]
+extents = Vector2( 3637.27, 128 )
+
+[node name="Main" type="Node2D"]
+
+[node name="Spawners" type="Node" parent="."]
+
+[node name="Barrels" parent="Spawners" instance=ExtResource( 6 )]
+spawn_rate = 1.0
+total = -1
+y_exact = -100
+what_to_spawn = ExtResource( 10 )
+
+[node name="Platforms" parent="Spawners" instance=ExtResource( 6 )]
+ground_check = false
+spawn_rate = 0.8
+total = -1
+y_exact = 0
+what_to_spawn = ExtResource( 5 )
+
+[node name="Platform" parent="Spawners/Platforms" instance=ExtResource( 5 )]
+position = Vector2( 550.544, 342.627 )
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2( 923, 540 )
+current = true
+zoom = Vector2( 1.8, 1.8 )
+
+[node name="ScreenShake" parent="Camera2D" instance=ExtResource( 11 )]
+
+[node name="Player" parent="." instance=ExtResource( 1 )]
+position = Vector2( 494.986, 262.661 )
+Gun = ExtResource( 8 )
+color = {
+"bullet": Color( 0.19, 0.76, 1.3, 1 ),
+"main": Color( 0.19, 0.76, 1.3, 1 )
+}
+jump_force = 35
+max_mid_air_jumps = 2
+
+[node name="Lava" type="Area2D" parent="." groups=[
+"lava",
+]]
+position = Vector2( -6.72717, 968.713 )
+z_index = 10
+script = ExtResource( 3 )
+
+[node name="Sprite" type="Sprite" parent="Lava"]
+modulate = Color( 1.28, 0.45, 0.11, 1 )
+position = Vector2( 980.869, 200.375 )
+scale = Vector2( 108.884, 4 )
+texture = ExtResource( 2 )
+
+[node name="Particles2D" type="CPUParticles2D" parent="Lava"]
+position = Vector2( 917.816, 79.7158 )
+amount = 100
+lifetime = 2.0
+preprocess = 84.96
+texture = ExtResource( 12 )
+emission_shape = 2
+emission_rect_extents = Vector2( 1000, 0 )
+direction = Vector2( 0, -1 )
+spread = 90.0
+gravity = Vector2( 0, 0 )
+initial_velocity = 82.35
+initial_velocity_random = 1.0
+scale_amount_random = 0.16
+scale_amount_curve = SubResource( 1 )
+color_ramp = SubResource( 2 )
+
+[node name="BG" type="CPUParticles2D" parent="Lava"]
+position = Vector2( 920.747, -759.524 )
+amount = 100
+preprocess = 116.81
+texture = ExtResource( 12 )
+emission_shape = 2
+emission_rect_extents = Vector2( 1000, 500 )
+direction = Vector2( 0, 1 )
+spread = 0.0
+gravity = Vector2( 0, 0 )
+initial_velocity = 674.95
+scale_amount = 0.01
+scale_amount_random = 0.11
+scale_amount_curve = SubResource( 1 )
+color_ramp = SubResource( 3 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Lava"]
+position = Vector2( 886.637, 215.402 )
+shape = SubResource( 4 )
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Health" parent="CanvasLayer" instance=ExtResource( 9 )]
+
+[node name="Score" parent="CanvasLayer" instance=ExtResource( 13 )]
+margin_left = 2.24493
+margin_top = 92.0419
+margin_right = 2.24487
+margin_bottom = 92.0419
+
+[node name="GameOver" parent="CanvasLayer" instance=ExtResource( 14 )]
+visible = false
+[connection signal="body_entered" from="Lava" to="Lava" method="_on_Area2D_body_entered"]

@@ -1,0 +1,23 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Guns/Gun.tscn" type="PackedScene" id=1]
+[ext_resource path="res://square.png" type="Texture" id=2]
+
+[node name="Rifle" instance=ExtResource( 1 )]
+fire_rate = 10.0
+kick_back = 5.0
+bullets_per_shot = 1
+
+[node name="Sprite" parent="." index="0"]
+position = Vector2( 0, -3.48029 )
+scale = Vector2( 1.13945, 0.205659 )
+
+[node name="square" type="Sprite" parent="." index="1"]
+self_modulate = Color( 0.0392157, 0.0392157, 0.0392157, 1 )
+position = Vector2( 4.40973, 5.98462 )
+scale = Vector2( 0.132317, 0.18589 )
+texture = ExtResource( 2 )
+
+[node name="Sprite2" parent="." index="3"]
+position = Vector2( 29.3647, 6.45581 )
+scale = Vector2( 0.124097, 0.190556 )

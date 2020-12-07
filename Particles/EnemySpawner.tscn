@@ -1,0 +1,36 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://Particles/EnemySpawner.gd" type="Script" id=1]
+[ext_resource path="res://Player/Enemy.tscn" type="PackedScene" id=2]
+
+[sub_resource type="Curve" id=1]
+_data = [ Vector2( 0, 0.305955 ), 0.0, 0.111389, 0, 0, Vector2( 0.232571, 0.99384 ), 0.00663442, 0.00663442, 0, 0, Vector2( 1, 0.494353 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="Gradient" id=2]
+offsets = PoolRealArray( 0, 0.564626 )
+colors = PoolColorArray( 1, 1, 1, 1, 1, 1, 1, 0 )
+
+[node name="EnemySpawner" type="CPUParticles2D"]
+amount = 100
+lifetime = 2.0
+lifetime_randomness = 1.0
+local_coords = false
+spread = 180.0
+gravity = Vector2( 0, -9.8 )
+initial_velocity = 80.0
+initial_velocity_random = 0.17
+angular_velocity = 175.79
+angular_velocity_random = 0.27
+orbit_velocity = 0.5
+orbit_velocity_random = 0.32
+damping = 100.0
+scale_amount = 10.0
+scale_amount_random = 0.32
+scale_amount_curve = SubResource( 1 )
+color_ramp = SubResource( 2 )
+script = ExtResource( 1 )
+enemies = [ ExtResource( 2 ) ]
+
+[node name="Timer" type="Timer" parent="."]
+autostart = true
+[connection signal="timeout" from="Timer" to="." method="_on_Timer_timeout"]
